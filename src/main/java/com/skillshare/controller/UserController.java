@@ -41,9 +41,3 @@ public class UserController {
                 user.setAddress(null);
                 user.setBirthday(null);
             });
-            return ResponseEntity.ok(users);
-        } catch (Exception e) {
-            log.error("Error fetching all users", e);
-            return ResponseEntity.status(500).body(null);
-        }
-    }
