@@ -41,3 +41,29 @@ public class UserController {
                 user.setAddress(null);
                 user.setBirthday(null);
             });
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            log.error("Error fetching all users", e);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable String id) {
+        try {
+            return userRepository.findById(id)
+                .map(user -> {
+                    // Clear sensitive data
+                    user.setPassword(null);
+                    user.setEmail(null);
+                    user.setAddress(null);
+                    user.setBirthday(null);
+                    return ResponseEntity.ok(user);
+                })
+                .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error fetching user: {}", id, e);
+            throw new RuntimeException("Failed to fetch user", e);
+        }
+    }
